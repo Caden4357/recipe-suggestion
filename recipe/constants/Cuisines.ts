@@ -1,0 +1,1 @@
+export const CuisinesList = ['Mexican', 'Indian','Mediterranean','Greek', 'Caribbean','African','Thai','Korean','Italian', 'American', 'Chinese', 'Japanese','Vietnamese','Latin American','Asian','German', 'British','Jewish', 'European', 'Spanish',  'Cajun', 'Nordic', 'Eastern European',  'Irish', 'French', 'Southern', 'Middle Eastern'];
