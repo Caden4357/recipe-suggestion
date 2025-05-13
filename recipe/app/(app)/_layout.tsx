@@ -3,7 +3,7 @@ import { Redirect, Stack, Tabs } from "expo-router";
 
 import { useSession } from "@/context/ctx";
 
-import '../global.css'
+import '../../global.css'
 
 export default function AppLayout() {
 	const { session, isLoading } = useSession();

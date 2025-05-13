@@ -1,154 +1,102 @@
-import type { ColorScheme, Theme } from '@/constants/Types';
-import type { Href } from 'expo-router';
-import { useState, useContext } from 'react';
-import { StyleSheet, View, Text, TextInput, Pressable, Alert, Appearance } from 'react-native';
-import { router, Link } from 'expo-router';
-import { authorizeUser } from '@/util/auth'
-import { useSession } from '@/context/ctx';
-import { Colors } from '@/constants/Colors'
+import { useState } from 'react';
+import { View, Text, TextInput, Pressable, Alert } from 'react-native';
+import { Link, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-const register = () => {
-    const colorScheme = Appearance.getColorScheme() ?? 'dark';
-    const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
-    const styles = createStyles(theme, colorScheme)
-    const [username, setUsername] = useState('');
+import { useColorScheme } from 'nativewind';
+
+import { authorizeUser } from '@/util/auth';
+import { useSession } from '@/context/ctx';
+
+const Register = () => {
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === 'dark';
+
     const { signIn } = useSession();
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
     const submitHandler = async () => {
         if (username.length < 3) {
-            Alert.alert("Username too short", "Username must be at least 3 characters long");
+            Alert.alert('Username too short', 'Username must be at least 3 characters long');
             return;
         }
         if (password !== confirmPassword) {
-            Alert.alert("Password Mismatch", "Passwords do not match");
+            Alert.alert('Password Mismatch', 'Passwords do not match');
             return;
         }
+
         try {
-            const result = await authorizeUser(email, password, username)
-            if(result?.token){
-                signIn(result?.token);
-                router.replace("/" as Href)
+            const result = await authorizeUser(email, password, username);
+            if (result?.token) {
+                signIn(result.token);
+                router.replace('/');
             }
+        } catch (err) {
+            Alert.alert('Authentication failed', 'Couldn’t register — check your credentials and try again');
         }
-        catch (err) {
-            Alert.alert("Authentication failed", "Couldnt register check your credentials and try again");
-        }
-    }
+    };
+
     return (
-        <View style={styles.container}>
-            <StatusBar style='auto' />
-            <Text style={styles.mainHeaderText}> <MaterialCommunityIcons name="chef-hat" size={32} color={theme.oppColor} /> SmartChef</Text>
-            <View style={styles.formContainer}>
-                <Text style={[styles.mainHeaderText, styles.loginHeaderText]}>Register</Text>
+        <View className="flex-1 items-center pt-12 dark:bg-zinc-900 bg-white px-4">
+            <StatusBar style="auto" />
+            <Text className="text-3xl font-bold dark:text-zinc-200 text-zinc-900 mb-4">
+                <MaterialCommunityIcons name="chef-hat" size={32} color={isDark ? 'white' : 'black'} /> SmartChef
+            </Text>
+
+            <View className="w-full items-center">
+                <Text className="text-2xl font-bold mb-5 dark:text-zinc-200 text-zinc-900">Register</Text>
+
                 <TextInput
-                    placeholderTextColor={theme.text}
                     placeholder="Username"
-                    onChangeText={(text) => setUsername(text)}
+                    placeholderTextColor={isDark ? '#d4d4d8' : '#171717'}
                     value={username}
-                    style={styles.formInput}
+                    onChangeText={setUsername}
+                    className="w-full mb-3 px-4 py-3 rounded-lg border dark:border-zinc-400 border-zinc-800 dark:text-white text-black"
                 />
                 <TextInput
-                    placeholderTextColor={theme.text}
                     placeholder="Email"
-                    onChangeText={(text) => setEmail(text)}
+                    placeholderTextColor={isDark ? '#d4d4d8' : '#171717'}
                     value={email}
-                    keyboardType='email-address'
-                    style={styles.formInput}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    className="w-full mb-3 px-4 py-3 rounded-lg border dark:border-zinc-400 border-zinc-800 dark:text-white text-black"
                 />
                 <TextInput
-                    placeholderTextColor={theme.text}
                     placeholder="Password"
-                    onChangeText={(text) => setPassword(text)}
+                    placeholderTextColor={isDark ? '#d4d4d8' : '#171717'}
                     value={password}
-                    secureTextEntry={true}
-                    style={styles.formInput}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                    className="w-full mb-3 px-4 py-3 rounded-lg border dark:border-zinc-400 border-zinc-800 dark:text-white text-black"
                 />
                 <TextInput
-                    placeholderTextColor={theme.text}
                     placeholder="Confirm Password"
-                    onChangeText={(text) => setConfirmPassword(text)}
+                    placeholderTextColor={isDark ? '#d4d4d8' : '#171717'}
                     value={confirmPassword}
-                    secureTextEntry={true}
-                    style={styles.formInput}
+                    onChangeText={setConfirmPassword}
+                    secureTextEntry
+                    className="w-full mb-6 px-4 py-3 rounded-lg border dark:border-zinc-400 border-zinc-800 dark:text-white text-black"
                 />
-                <Pressable style={[styles.bttnMain, styles.bttn]} onPress={submitHandler}>
-                    <Text style={styles.bttnText}>Register</Text>
+
+                <Pressable
+                    onPress={submitHandler}
+                    className="bg-orange-800 py-3 px-6 rounded-xl w-1/2 items-center"
+                >
+                    <Text className="text-white font-bold text-base">Register</Text>
                 </Pressable>
             </View>
-            <Text style={styles.linkText}>
-                Already have an account? <Link href={"/" as Href} style={styles.link}>Login here</Link>
+
+            <Text className="mt-4 dark:text-zinc-300 text-zinc-700">
+                Already have an account?{' '}
+                <Link href="/" className="text-orange-600 underline">
+                    Login here
+                </Link>
             </Text>
         </View>
     );
-}
-export default register;
-function createStyles(theme:Theme, colorScheme:ColorScheme) {
+};
 
-
-    return StyleSheet.create({
-        container: {
-            flex: 1,
-            alignItems: 'center',
-            paddingTop: 50,
-            backgroundColor: theme.background
-        },
-        mainHeaderText: {
-            fontSize: 32,
-            color: theme.text,
-            fontWeight: 'bold',
-        },
-        loginHeaderText: {
-            fontSize: 24,
-            marginBottom: 20,
-        },
-        formContainer: {
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 12
-        },
-        formInput: {
-            borderWidth: 1,
-            borderColor: theme.oppColor,
-            borderRadius: 10,
-            width: '100%',
-            marginBottom: 12,
-            paddingLeft: 12,
-            color: theme.text
-        },
-        bttnContainer: {
-            flexDirection: 'row',
-            gap: 6
-        },
-        bttnMain: {
-            backgroundColor: Colors.persimmon800,
-        },
-        bttnSecondary: {
-            backgroundColor: Colors.persimmon200,
-        },
-        bttn: {
-            padding: 10,
-            borderRadius: 15,
-            width: '50%',
-            alignItems: 'center'
-        },
-        bttnText: {
-            fontSize: 16,
-            fontWeight: 'bold'
-        },
-        secondaryBttnText: {
-            color: '#ED5E32'
-        },
-        linkText: {
-            color: theme.text
-        },
-        link: {
-            color: '#ED5E32',
-            textDecorationLine: 'underline'
-        }
-    })
-}
+export default Register;
