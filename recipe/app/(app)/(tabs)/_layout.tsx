@@ -8,6 +8,16 @@ const TabLayout = () => {
 		<Tabs
 			screenOptions={{
 				headerShown: false,
+				tabBarStyle:{
+					height:70,
+					borderWidth:2,
+					borderBlockColor:'red',
+					borderRadius:50,
+					paddingTop:8
+				},
+				tabBarLabelStyle:{
+					
+				}
 			}}
 		>
 			<Tabs.Screen

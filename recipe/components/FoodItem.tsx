@@ -13,7 +13,7 @@ type FoodItem = {
 }
 
 const FoodItem = ({ item }: FoodItem) => {
-    console.log('ITEM: ',item);
+    // console.log('ITEM: ',item);
     const colorScheme = Appearance.getColorScheme() ?? 'dark';
     const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
     const styles = createStyles(theme, colorScheme);

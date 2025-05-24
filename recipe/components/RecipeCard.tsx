@@ -7,15 +7,14 @@ type Props = {
 };
 
 const RecipeCard = ({ recipe }: Props) => {
+    // console.log(recipe.image);
     return (
         <View className="items-center mb-6">
-            {recipe.image && (
-                <Image
-                    source={{ uri: recipe.image }}
-                    className="w-48 h-48 rounded-lg mb-4"
-                    resizeMode="cover"
-                />
-            )}
+            <Image
+                source={{ uri: recipe?.image }}
+                className='w-48 h-48 rounded'
+                resizeMode='cover'
+            />
             <Text className="text-2xl font-bold text-zinc-900 dark:text-zinc-200 text-center mb-2">
                 Cook {recipe.title}
             </Text>

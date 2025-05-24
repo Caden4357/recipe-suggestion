@@ -31,10 +31,10 @@ const CookRecipe = () => {
 
 	return (
 		<SafeAreaView className="flex-1 bg-white dark:bg-zinc-900 px-4 pt-6">
-			<ScrollView showsVerticalScrollIndicator={false}>
+			{/* <ScrollView showsVerticalScrollIndicator={false}> */}
 				<RecipeCard recipe={recipe} />
 				<IngredientList ingredients={recipe.extendedIngredients} />
-			</ScrollView>
+			{/* </ScrollView> */}
 		</SafeAreaView>
 	);
 };

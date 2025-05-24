@@ -18,7 +18,6 @@ const RecipeList = () => {
             try {
                 setLoading(true);
                 const data = await getRandomRecipes()
-                console.log(data.recipes);
                 setRecipes(data.recipes);
                 setLoading(false)
             }
@@ -28,6 +27,10 @@ const RecipeList = () => {
             }
         }
         getRecipes();
+
+        return () =>{
+            setRecipes([]);
+        }
     }, [setRecipes, setLoading])
 
     if (loading) {
