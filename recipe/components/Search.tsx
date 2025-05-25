@@ -1,48 +1,31 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Appearance } from 'react-native';
+import { useState } from 'react';
+import { View, TextInput } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Colors } from '@/constants/Colors'
-import type { ColorScheme, Theme } from '@/constants/Types';
+import { useColorScheme } from 'nativewind';
 
 const Search = () => {
-    const colorScheme = Appearance.getColorScheme() ?? 'dark';
-    const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
-    const styles = createStyles(theme, colorScheme)
-    const [search, setSearch] = useState('')
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === 'dark';
+
+    const [search, setSearch] = useState('');
     console.log(search);
+
     return (
-        <View style={styles.searchContainer}>
-            <View style={styles.searchBar}>
-                <AntDesign name="search1" size={24} color="white" />
+        <View className="flex-row justify-center w-full">
+            <View
+                className={`flex-row items-center w-4/5 px-3 py-2 rounded-2xl border ${isDark ? 'border-white' : 'border-black'
+                    }`}
+            >
+                <AntDesign name="search1" size={24} color={isDark ? 'white' : 'black'} />
                 <TextInput
-                    placeholder='Search Ingredients'
-                    placeholderTextColor={theme.text}
-                    onChangeText={(text) => setSearch(text)}
-                    style={styles.searchText}
+                    placeholder="Search Ingredients"
+                    placeholderTextColor={isDark ? '#E4E4E7' : '#111827'}
+                    onChangeText={setSearch}
+                    className={`ml-2 flex-1 ${isDark ? 'text-white' : 'text-black'}`}
                 />
             </View>
         </View>
-    )
-}
+    );
+};
 
 export default Search;
-function createStyles(theme: Theme, colorScheme: ColorScheme) {
-    return StyleSheet.create({
-        searchContainer: {
-            flexDirection: 'row',
-            justifyContent: 'center'
-        },
-        searchBar: {
-            paddingLeft: 12,
-            width: '80%',
-            borderRadius: 20,
-            borderWidth: 1,
-            borderColor: theme.oppColor,
-            flexDirection: 'row',
-            alignItems: 'center'
-        },
-        searchText: {
-            color: theme.text,
-        }
-    })
-}

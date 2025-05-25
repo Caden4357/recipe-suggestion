@@ -1,84 +1,81 @@
-import type { Href } from 'expo-router';
-import type { ColorScheme, Theme } from '@/constants/Types';
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Text, Appearance, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
-import { Colors } from '@/constants/Colors'
-import { getRandomRecipes } from '@/lib/recipes'
+import { useEffect, useState } from 'react';
+import { View, Text, FlatList, Alert, Pressable, Modal } from 'react-native';
+import { getRandomRecipes } from '@/lib/recipes';
 import { useRecipes } from '@/context/recipe';
 import FoodItem from './FoodItem';
+import { useColorScheme } from 'nativewind';
+import Entypo from '@expo/vector-icons/Entypo';
+import DietRestrictions from './DietRestrictions';
 
 const RecipeList = () => {
-    const colorScheme = Appearance.getColorScheme() ?? 'dark';
-    const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
-    const styles = createStyles(theme, colorScheme);
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === 'dark';
+    const [modalVisible, setModalVisible] = useState(false);
     const { recipes, setRecipes, loading, setLoading } = useRecipes();
 
     useEffect(() => {
         const getRecipes = async () => {
             try {
                 setLoading(true);
-                const data = await getRandomRecipes()
+                const data = await getRandomRecipes();
                 setRecipes(data.recipes);
-                setLoading(false)
+                setLoading(false);
+            } catch (err) {
+                Alert.alert('There was an issue fetching recipes');
+                setLoading(false);
             }
-            catch (err) {
-                Alert.alert('There was an issue fetching recipes')
-                setLoading(false)
-            }
-        }
+        };
+
         getRecipes();
 
-        return () =>{
+        return () => {
             setRecipes([]);
-        }
-    }, [setRecipes, setLoading])
+        };
+    }, [setRecipes, setLoading]);
 
     if (loading) {
         return (
-            <View>
-                <Text style={styles.title}>Loading...</Text>
+            <View className="mt-8 px-4">
+                <Text className="text-2xl dark:text-zinc-200 text-zinc-900">Loading...</Text>
             </View>
         );
     }
+
+
+    const openModal = () => {
+        console.log('Modal opening');
+    }
+
     return (
-        <View>
-            <Text style={styles.title}>Popular Recipes</Text>
+        <View className="mt-8 px-4">
+            <View className='flex-row items-center justify-between'>
+                <Text className="text-2xl font-bold mb-4 dark:text-zinc-200 text-zinc-900">Popular Recipes</Text>
+                <Pressable onPress={() => setModalVisible(true)}>
+                    <Entypo name="menu" size={24} color="orange" />
+                </Pressable>
+            </View>
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    setModalVisible(!modalVisible);
+                }}>
+                    <DietRestrictions/>
+                    <Pressable onPress={() => setModalVisible(false)}>
+                        <Text>Done</Text>
+                    </Pressable>
+            </Modal>
             <FlatList
                 data={recipes}
-                keyExtractor={item => item.id}
+                keyExtractor={(item) => item.id}
                 renderItem={({ item }) => <FoodItem item={item} />}
-                horizontal={true}
+                horizontal
+                showsHorizontalScrollIndicator={false}
             />
         </View>
-    )
-}
-
+    );
+};
 
 export default RecipeList;
-
-function createStyles(theme: Theme, colorScheme: ColorScheme) {
-    return StyleSheet.create({
-        title: {
-            color: theme.text,
-            fontSize: 24,
-            marginTop: 30,
-        },
-        foodItemContainer: {
-            maxWidth: 220,
-            borderRadius: 20,
-            margin: 6,
-            alignItems: 'center'
-        },
-        foodItemText: {
-            color: theme.text
-        },
-        image: {
-            width: 200,
-            height: 200,
-            borderRadius: 20,
-            borderColor: theme.text,
-            borderWidth: 1,
-            padding: 8,
-        }
-    })
-}

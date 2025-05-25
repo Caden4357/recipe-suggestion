@@ -57,6 +57,15 @@ const Profile = () => {
             </View>
             <View className='flex-row justify-between w-3/4 mt-8'>
                 <View className='flex-row gap-8'>
+                    <AntDesign name="profile" size={24} color="orange" />
+                    <Text className='dark:text-white text-2xl font-bold'>Customize Profile</Text>
+                </View>
+                <Pressable>
+                    <AntDesign name="arrowright" size={24} color="orange" />
+                </Pressable>
+            </View>
+            <View className='flex-row justify-between w-3/4 mt-8'>
+                <View className='flex-row gap-8'>
                     <AntDesign name="setting" size={24} color="orange" />
                     <Text className='dark:text-white text-2xl font-bold'>Settings</Text>
                 </View>

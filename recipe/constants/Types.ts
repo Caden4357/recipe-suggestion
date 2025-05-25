@@ -1,5 +1,11 @@
 export type ColorScheme = 'light' | 'dark'
 
+export type FoodItemType = {
+    id: string,
+    title: string,
+    image: string
+}
+
 export type Theme = {
     text: string,
     background: string,

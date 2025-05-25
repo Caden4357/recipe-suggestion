@@ -1,62 +1,40 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View, Alert, Appearance } from 'react-native'
-import { Colors } from '@/constants/Colors'
-import { router } from 'expo-router'
-import type { Href } from 'expo-router'
-import type { ColorScheme, Theme } from '@/constants/Types'
-type Item = {
-    id: string,
-    title: string,
-    image: string
-}
-type FoodItem = {
-    item: Item
-}
+import { Image, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { router } from 'expo-router';
+import type { Href } from 'expo-router';
+import type { FoodItemType } from '@/constants/Types';
+import { useColorScheme } from 'nativewind';
 
-const FoodItem = ({ item }: FoodItem) => {
-    // console.log('ITEM: ',item);
-    const colorScheme = Appearance.getColorScheme() ?? 'dark';
-    const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
-    const styles = createStyles(theme, colorScheme);
+type FoodItemProps = {
+    item: FoodItemType;
+};
 
-    function viewRecipe(id: string) {
-        if (!id) Alert.alert('something went wrong. Try again later');
-        // navigate to view/cook recipe page next
+const FoodItem = ({ item }: FoodItemProps) => {
+    const { colorScheme } = useColorScheme();
+    const isDark = colorScheme === 'dark';
+
+    const viewRecipe = (id: string) => {
+        if (!id) {
+            Alert.alert('Something went wrong. Try again later.');
+            return;
+        }
         router.push(`/recipe/${id}` as Href);
-    }
+    };
+
     return (
         <TouchableOpacity onPress={() => viewRecipe(item.id)}>
-            <View style={styles.foodItemContainer}>
+            <View className="max-w-[220px] rounded-2xl m-1.5 items-center">
                 <Image
-                    style={styles.image}
-                    source={{
-                        uri: item.image
-                    }}
+                    source={{ uri: item.image }}
+                    className={`w-48 h-48 rounded-2xl border p-2 ${isDark ? 'border-zinc-200' : 'border-zinc-800'
+                        }`}
+                    resizeMode="cover"
                 />
-                <Text style={styles.foodItemText}>{item.title}</Text>
+                <Text className="mt-2 text-center text-base font-medium dark:text-zinc-200 text-zinc-900">
+                    {item.title}
+                </Text>
             </View>
         </TouchableOpacity>
-    )
-}
-export default FoodItem
-function createStyles(theme: Theme, colorScheme: ColorScheme) {
-    return StyleSheet.create({
-        foodItemContainer: {
-            maxWidth: 220,
-            borderRadius: 20,
-            margin: 6,
-            alignItems: 'center'
-        },
-        foodItemText: {
-            color: theme.text
-        },
-        image: {
-            width: 200,
-            height: 200,
-            borderRadius: 20,
-            borderColor: theme.text,
-            borderWidth: 1,
-            padding: 8,
-        }
-    })
-}
+    );
+};
 
+export default FoodItem;
