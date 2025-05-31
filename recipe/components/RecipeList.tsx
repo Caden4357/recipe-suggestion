@@ -6,12 +6,20 @@ import FoodItem from './FoodItem';
 import { useColorScheme } from 'nativewind';
 import Entypo from '@expo/vector-icons/Entypo';
 import DietRestrictions from './DietRestrictions';
+import { MultipleSelectList } from 'react-native-dropdown-select-list';
+
+const data = [
+    { key: '1', value: 'Gluten Free' },
+    { key: '2', value: 'Vegetarian' },
+    { key: '3', value: 'Vegan' },
+];
 
 const RecipeList = () => {
     const { colorScheme } = useColorScheme();
     const isDark = colorScheme === 'dark';
-    const [modalVisible, setModalVisible] = useState(false);
+    const [dropdownVisible, setDropdownVisible] = useState(false);
     const { recipes, setRecipes, loading, setLoading } = useRecipes();
+    const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
     useEffect(() => {
         const getRecipes = async () => {
@@ -50,23 +58,27 @@ const RecipeList = () => {
         <View className="mt-8 px-4">
             <View className='flex-row items-center justify-between'>
                 <Text className="text-2xl font-bold mb-4 dark:text-zinc-200 text-zinc-900">Popular Recipes</Text>
-                <Pressable onPress={() => setModalVisible(true)}>
-                    <Entypo name="menu" size={24} color="orange" />
-                </Pressable>
+                <View className='flex-row dark:text-white'>
+                    <MultipleSelectList
+                        setSelected={setSelectedItems}
+                        data={data}
+                        save="value"
+                        label="Dietary Restrictions"
+                        boxStyles={{
+                            backgroundColor: isDark ? '#1f2937' : '#f3f4f6',
+                            borderColor: isDark ? '#4b5563' : '#d1d5db',
+                            borderWidth: 1,
+                            borderRadius: 8,
+                            paddingHorizontal: 10,
+                        }}
+                        inputStyles={{
+                            color: isDark ? 'white' : 'black',
+                            fontSize: 16,
+                        }}
+                        dropdownTextStyles={{ color: isDark ? 'white' : 'black' }}
+                    />
+                </View>
             </View>
-            <Modal
-                animationType="slide"
-                transparent={false}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                    setModalVisible(!modalVisible);
-                }}>
-                    <DietRestrictions/>
-                    <Pressable onPress={() => setModalVisible(false)}>
-                        <Text>Done</Text>
-                    </Pressable>
-            </Modal>
             <FlatList
                 data={recipes}
                 keyExtractor={(item) => item.id}
