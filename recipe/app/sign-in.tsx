@@ -42,12 +42,6 @@ const Login = () => {
     return (
         <View className="flex-1 items-center pt-12 px-4 dark:bg-zinc-900 bg-white">
             <StatusBar style="auto" />
-            <TouchableOpacity onPress={toggleColorScheme} className="mb-2">
-                <Text className="text-sm text-zinc-700 dark:text-zinc-300">
-                    Change theme to {isDark ? 'Light' : 'Dark'}
-                </Text>
-            </TouchableOpacity>
-
             <Text className="text-3xl font-bold mb-4 dark:text-zinc-200 text-zinc-900">
                 <MaterialCommunityIcons
                     name="chef-hat"

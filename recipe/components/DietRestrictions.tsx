@@ -1,26 +1,36 @@
 
 import { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { useColorScheme } from 'nativewind';
-import { AdvancedCheckbox, CheckboxGroup } from 'react-native-advanced-checkbox';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import { MaterialIcons } from '@expo/vector-icons';
+const items = [
+    { name: 'Apples', id: 1 },
+    { name: 'Oranges', id: 2 },
+    { name: 'Pears', id: 3 },
+];
+const CustomIcon = () => {
+    return <MaterialIcons/>;
+};
 const DietRestrictions = () => {
     const { colorScheme } = useColorScheme();
     const isDark = colorScheme === 'dark';
-    const [selectedValues, setSelectedValues] = useState<string[]>(['']);
+    const [selectedItems, setSelectedItems] = useState<number[]>([]);
 
-    const handleCheckbox = (value:string[]) => {
-        console.log('VALUE: ', value);
-        setSelectedValues([...selectedValues, ...value]);
+    const handleCheck = (val: string) => {
     }
     return (
-        <View className='w-2/4 border-2 mx-auto justify-center h-3/4'>
+        <View className='w-2/4 border-2 mx-auto justify-center h-2/4'>
             <Text className='dark:text-white text-xl font-bold'>Dietary Restrictions</Text>
             <View className='flex-row'>
-                <CheckboxGroup onValueChange={handleCheckbox}>
-                    <AdvancedCheckbox value="glutenFree" label="Gluten Free" checkedColor="#FF6347" />
-                    <AdvancedCheckbox value="vegetarian" label="Vegetarian" checkedColor="#FF6347" />
-                    <AdvancedCheckbox value="vegan" label="Vegan" checkedColor="#FF6347" />
-                </CheckboxGroup>
+                <SectionedMultiSelect
+                    items={items}
+                    uniqueKey="id"
+                    onSelectedItemsChange={setSelectedItems}
+                    selectedItems={selectedItems}
+                    IconRenderer={<CustomIcon/>} // Error here still 
+                />
             </View>
         </View>
     );
