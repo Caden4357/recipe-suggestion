@@ -17,7 +17,6 @@ const data = [
 const RecipeList = () => {
     const { colorScheme } = useColorScheme();
     const isDark = colorScheme === 'dark';
-    const [dropdownVisible, setDropdownVisible] = useState(false);
     const { recipes, setRecipes, loading, setLoading } = useRecipes();
     const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -56,29 +55,7 @@ const RecipeList = () => {
 
     return (
         <View className="mt-8 px-4">
-            <View className='flex-row items-center justify-between'>
-                <Text className="text-2xl font-bold mb-4 dark:text-zinc-200 text-zinc-900">Popular Recipes</Text>
-                <View className='flex-row dark:text-white'>
-                    <MultipleSelectList
-                        setSelected={setSelectedItems}
-                        data={data}
-                        save="value"
-                        label="Dietary Restrictions"
-                        boxStyles={{
-                            backgroundColor: isDark ? '#1f2937' : '#f3f4f6',
-                            borderColor: isDark ? '#4b5563' : '#d1d5db',
-                            borderWidth: 1,
-                            borderRadius: 8,
-                            paddingHorizontal: 10,
-                        }}
-                        inputStyles={{
-                            color: isDark ? 'white' : 'black',
-                            fontSize: 16,
-                        }}
-                        dropdownTextStyles={{ color: isDark ? 'white' : 'black' }}
-                    />
-                </View>
-            </View>
+            <DietRestrictions/>
             <FlatList
                 data={recipes}
                 keyExtractor={(item) => item.id}
