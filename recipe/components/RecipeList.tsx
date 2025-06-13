@@ -26,6 +26,7 @@ const RecipeList = () => {
                 setLoading(true);
                 const data = await getRandomRecipes();
                 setRecipes(data.recipes);
+                console.log(data.recipes);
                 setLoading(false);
             } catch (err) {
                 Alert.alert('There was an issue fetching recipes');
