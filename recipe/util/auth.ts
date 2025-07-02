@@ -38,7 +38,7 @@ export async function getCurrentUser(): Promise<User | undefined> {
     try {
         const user = getAuth();
         if (user.currentUser) {
-            const { displayName, email } = user.currentUser
+            const { displayName, email } = user.currentUser;
             return { displayName, email };
         }
         return undefined;

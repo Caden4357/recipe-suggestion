@@ -7,18 +7,10 @@ import { useColorScheme } from 'nativewind';
 import Entypo from '@expo/vector-icons/Entypo';
 import DietRestrictions from './DietRestrictions';
 import { MultipleSelectList } from 'react-native-dropdown-select-list';
-
-const data = [
-    { key: '1', value: 'Gluten Free' },
-    { key: '2', value: 'Vegetarian' },
-    { key: '3', value: 'Vegan' },
-];
+import Loading from './Loading';
 
 const RecipeList = () => {
-    const { colorScheme } = useColorScheme();
-    const isDark = colorScheme === 'dark';
     const { recipes, setRecipes, loading, setLoading } = useRecipes();
-    const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
     useEffect(() => {
         const getRecipes = async () => {
@@ -42,16 +34,10 @@ const RecipeList = () => {
     }, [setRecipes, setLoading]);
 
     if (loading) {
+        console.log();
         return (
-            <View className="mt-8 px-4">
-                <Text className="text-2xl dark:text-zinc-200 text-zinc-900">Loading...</Text>
-            </View>
+            <Loading/>
         );
-    }
-
-
-    const openModal = () => {
-        console.log('Modal opening');
     }
 
     return (
