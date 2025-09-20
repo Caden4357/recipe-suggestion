@@ -3,11 +3,11 @@ const { Schema, model } = mongoose;
 
 const UsersFavRecipesSchema = new Schema({
     userId: {
-        type: string,
+        type: String,
         required: true
     },
     recipeId: {
-        type: [string],
+        type: [String],
         required: true
     }
 }, { timestamps: true });

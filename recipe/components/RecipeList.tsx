@@ -34,7 +34,6 @@ const RecipeList = () => {
     }, [setRecipes, setLoading]);
 
     if (loading) {
-        console.log();
         return (
             <Loading/>
         );
